@@ -24,6 +24,13 @@ void render_grid(SDL_Renderer *renderer, int x, int y) {
   SDL_Rect cell;
   cell.w = cell_size;
   cell.w = cell_size;
+
+  for (int i = 0; i < GRID_SIZE; i++) {
+    for (int j = 0; j < GRID_SIZE; j++) {
+      cell.x = x + (i * cell_size);
+      cell.y = y + (j * cell_size);
+    }
+  }
   return;
 }
 
