@@ -7,16 +7,55 @@
 #include <SDL2/SDL_video.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-/* Fullscreen
- */
+/* Fullscreen */
 #define WINDOW_X 0
 #define WINDOW_Y 0
 #define WINDOWWIDTH 1920
 #define WINDOWHEIGHT 1200
 
 #define GRID_SIZE 20
-#define GRID_DIMENSION 800
+#define GRID_DIMENSION 1000
+
+/* Snake direction logic */
+enum {
+  Snake_UP,
+  Snake_DOWN,
+  Snake_LEFT,
+  Snake_Right,
+};
+
+/* snake body parts*/
+
+struct snake {
+  int x;
+  int y;
+  int dir;
+  struct snake *next;
+};
+typedef struct snake Snake;
+
+Snake *head;
+Snake *tail;
+
+/*Create snake on the grid */
+
+void create_snake() {
+
+  Snake *new = malloc(sizeof(Snake));
+  new->x = rand() % (GRID_SIZE / 2) + (GRID_SIZE / 4);
+  new->y = rand() % (GRID_SIZE / 2) + (GRID_SIZE / 4);
+  new->dir = Snake_UP;
+  new->next = NULL;
+
+  head = new;
+  tail = new;
+
+  return;
+}
+
+void grow_snake();
 
 void render_grid(SDL_Renderer *renderer, int x, int y) {
 
