@@ -61,6 +61,9 @@ int main() {
     fprintf(stderr, "ERROR:!renderer");
   }
 
+  int grid_x = (WINDOWWIDTH / 2) - (GRID_DIMENSION / 2);
+  int grid_y = (WINDOWHEIGHT / 2) - (GRID_DIMENSION / 2);
+
   bool quit = false;
   SDL_Event event;
   while (!quit) {
@@ -81,9 +84,11 @@ int main() {
     }
     SDL_RenderClear(renderer);
     // RENDERLOOPSTR
-    render_grid(renderer, 200, 200);
+
+    render_grid(renderer, grid_x, grid_y);
+
     // RENDERLOOPEND
-    SDL_SetRenderDrawColor(renderer, 0x00, 0xff, 0x00, 255);
+    SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 255);
     SDL_ShowWindow(window);
     SDL_RenderPresent(renderer);
   }
