@@ -5,9 +5,11 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <wchar.h>
 
 /* Fullscreen */
 #define WINDOW_X 0
@@ -75,6 +77,49 @@ void render_grid(SDL_Renderer *renderer, int x, int y) {
     }
   }
   return;
+}
+
+// Function to handle snake movement
+//
+
+void snake_move() {
+
+  // Snake Head logic
+  //
+  Snake *new_head = (Snake *)malloc(sizeof(Snake));
+  if (!new_head) {
+    fprintf(stderr, "ERROR:!new_head");
+    exit(1);
+  }
+
+  new_head->x = head->x;
+  new_head->y = head->y;
+  new_head->dir = head->dir;
+  new_head->next = head;
+
+  head = new_head;
+
+  // tail logic
+  //
+
+  if (head != tail) {
+
+    Snake *current = head;
+    while (current->next != tail) {
+      current = current->next;
+    }
+
+    free(tail);
+
+    tail = current;
+    tail->next = NULL;
+  }
+
+  else {
+    free(new_head->next);
+    tail = new_head;
+    tail->next = NULL;
+  }
 }
 
 int main() {
