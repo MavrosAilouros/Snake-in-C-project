@@ -5,6 +5,7 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <math.h>
@@ -18,8 +19,8 @@
 //
 #define WINDOW_X 0
 #define WINDOW_Y 0
-#define WINDOWWIDTH 1920
-#define WINDOWHEIGHT 1200
+#define WINDOWWIDTH 1600
+#define WINDOWHEIGHT 900
 
 #define GRID_SIZE 20
 #define GRID_DIMENSION 1000
@@ -230,10 +231,23 @@ int main() {
     render_grid(renderer, grid_x, grid_y);
 
     // Initial render for snek
+    //
 
-    // SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00,255 );
-
-    // snek should go here...
+    SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 255);
+    SDL_Rect snek_cell;
+    snek_cell.w = cell_size;
+    snek_cell.h = cell_size;
+    Snake *current_segment = head;
+    while (current_segment) {
+      snek_cell.x = grid_x + (current_segment->x * cell_size);
+      snek_cell.y = grid_y + (current_segment->y * cell_size);
+      printf("Drawing snek grid_x=%d, grid_y=%d, cell_size=%d, segment "
+             "x=%d, y=%d (pixel x=%d, pixel y=%d)\n",
+             grid_x, grid_y, cell_size, current_segment->x, current_segment->y,
+             snek_cell.x, snek_cell.y);
+      SDL_RenderFillRect(renderer, &snek_cell);
+      current_segment = current_segment->next;
+    }
 
     // RENDERLOOPEND
     SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 255);
