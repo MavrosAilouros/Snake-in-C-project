@@ -4,14 +4,18 @@
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
 
-/* Fullscreen */
+// Fullscreen
+//
 #define WINDOW_X 0
 #define WINDOW_Y 0
 #define WINDOWWIDTH 1920
@@ -20,15 +24,17 @@
 #define GRID_SIZE 20
 #define GRID_DIMENSION 1000
 
-/* Snake direction logic */
+// Snake direction logic
+//
 enum {
   Snake_UP,
   Snake_DOWN,
   Snake_LEFT,
-  Snake_Right,
+  Snake_RIGHT,
 };
 
-/* snake body parts*/
+// snake body parts
+//
 
 struct snake {
   int x;
@@ -41,7 +47,8 @@ typedef struct snake Snake;
 Snake *head;
 Snake *tail;
 
-/*Create snake on the grid */
+// Create snake on the grid
+//
 
 void create_snake() {
 
@@ -148,9 +155,40 @@ int main() {
   int grid_x = (WINDOWWIDTH / 2) - (GRID_DIMENSION / 2);
   int grid_y = (WINDOWHEIGHT / 2) - (GRID_DIMENSION / 2);
 
+  // our snek size hehe
+  //
+
+  int cell_size = GRID_DIMENSION / GRID_SIZE;
+
+  // Add in our little buddy :)
+  //
+
+  create_snake();
+
+  // Implement a tick counter --
+  // to make our movement appear --
+  // constant
+  //
+
+  Uint32 last_move = SDL_GetTicks();
+  int Snake_Speed = 150; // time counter is in MS
+
   bool quit = false;
   SDL_Event event;
   while (!quit) {
+
+    // In-game timing logic
+    //
+
+    Uint32 current_time = SDL_GetTicks();
+    if (current_time - last_move > Snake_Speed) {
+      snake_move();
+      last_move = current_time;
+    }
+
+    // logic for controls
+    //
+
     while (SDL_PollEvent(&event)) {
       switch (event.type) {
       case SDL_QUIT:
@@ -160,6 +198,26 @@ int main() {
         break;
       case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
+        case SDLK_UP:
+          if (head->dir != Snake_DOWN) {
+            head->dir = Snake_UP;
+          }
+          break;
+        case SDLK_DOWN:
+          if (head->dir != Snake_UP) {
+            head->dir = Snake_DOWN;
+          }
+          break;
+        case SDLK_LEFT:
+          if (head->dir != Snake_RIGHT) {
+            head->dir = Snake_LEFT;
+          }
+          break;
+        case SDLK_RIGHT:
+          if (head->dir != Snake_LEFT) {
+            head->dir = Snake_RIGHT;
+          }
+          break;
         case SDLK_ESCAPE:
           quit = true;
           break;
@@ -170,6 +228,12 @@ int main() {
     // RENDERLOOPSTR
 
     render_grid(renderer, grid_x, grid_y);
+
+    // Initial render for snek
+
+    // SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00,255 );
+
+    // snek should go here...
 
     // RENDERLOOPEND
     SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 255);
