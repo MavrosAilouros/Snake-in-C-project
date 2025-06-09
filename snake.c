@@ -103,8 +103,25 @@ void snake_move() {
   new_head->x = head->x;
   new_head->y = head->y;
   new_head->dir = head->dir;
-  new_head->next = head;
 
+  switch (new_head->dir) {
+  case Snake_UP:
+    new_head->y--;
+    break;
+  case Snake_DOWN:
+    new_head->y++;
+    break;
+  case Snake_LEFT:
+    new_head->x--;
+    break;
+  case Snake_RIGHT:
+    new_head->x++;
+    break;
+  default:
+    break;
+  }
+
+  new_head->next = head;
   head = new_head;
 
   // tail logic
@@ -241,10 +258,6 @@ int main() {
     while (current_segment) {
       snek_cell.x = grid_x + (current_segment->x * cell_size);
       snek_cell.y = grid_y + (current_segment->y * cell_size);
-      printf("Drawing snek grid_x=%d, grid_y=%d, cell_size=%d, segment "
-             "x=%d, y=%d (pixel x=%d, pixel y=%d)\n",
-             grid_x, grid_y, cell_size, current_segment->x, current_segment->y,
-             snek_cell.x, snek_cell.y);
       SDL_RenderFillRect(renderer, &snek_cell);
       current_segment = current_segment->next;
     }
