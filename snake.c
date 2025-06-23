@@ -45,8 +45,27 @@ struct snake {
 };
 typedef struct snake Snake;
 
+struct apple {
+	int x;
+	int y;
+
+}; 
+typedef struct apple Apple;
+
 Snake *head;
 Snake *tail;
+
+//crear la manzanita
+void create_apple() {
+	Apple *new =malloc(sizeof(Apple));
+	new->x=rand()%new->x = rand() % (GRID_SIZE / 2) + (GRID_SIZE / 4);
+	 new->y = rand() % (GRID_SIZE / 2) + (GRID_SIZE / 4);
+
+
+
+}
+
+
 
 // Create snake on the grid
 //
