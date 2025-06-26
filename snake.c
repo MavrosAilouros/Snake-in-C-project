@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <wchar.h>
 
 // Fullscreen
@@ -45,27 +46,27 @@ struct snake {
 };
 typedef struct snake Snake;
 
-struct apple {
-	int x;
-	int y;
-
-}; 
-typedef struct apple Apple;
-
 Snake *head;
 Snake *tail;
 
-//crear la manzanita
-void create_apple() {
-	Apple *new =malloc(sizeof(Apple));
-	new->x=rand()%new->x = rand() % (GRID_SIZE / 2) + (GRID_SIZE / 4);
-	 new->y = rand() % (GRID_SIZE / 2) + (GRID_SIZE / 4);
+// Variables para la manzana
+int apple_x, apple_y;  //Posicion de la manzana
 
-
-
+void place_apple() {
+    apple_x = rand() % (GRID_SIZE-2);
+    apple_y = rand() % (GRID_SIZE-2);
 }
 
-
+// Función para dibujar la manzana
+void draw_apple(SDL_Renderer *renderer, int grid_x, int grid_y, int cell_size) {
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 255); // color rojo
+    SDL_Rect apple_cell;
+    apple_cell.w = cell_size;
+    apple_cell.h = cell_size;
+    apple_cell.x = grid_x + (apple_x * cell_size);
+    apple_cell.y = grid_y + (apple_y * cell_size);
+    SDL_RenderFillRect(renderer, &apple_cell);
+}
 
 // Create snake on the grid
 //
@@ -192,10 +193,12 @@ int main() {
   int grid_x = (WINDOWWIDTH / 2) - (GRID_DIMENSION / 2);
   int grid_y = (WINDOWHEIGHT / 2) - (GRID_DIMENSION / 2);
 
-  // our snek size hehe
-  //
+  srand(time(NULL)); 
 
   int cell_size = GRID_DIMENSION / GRID_SIZE;
+  place_apple();
+  // our snek size hehe
+  //
 
   // Add in our little buddy :)
   //
@@ -280,6 +283,9 @@ int main() {
       SDL_RenderFillRect(renderer, &snek_cell);
       current_segment = current_segment->next;
     }
+
+    //Render de la manzana
+    draw_apple(renderer, grid_x, grid_y, cell_size);
 
     // RENDERLOOPEND
     SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 255);
