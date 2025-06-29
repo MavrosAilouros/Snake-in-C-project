@@ -20,7 +20,7 @@
 #define WINDOW_X 0
 #define WINDOW_Y 0
 #define WINDOWWIDTH 1600
-#define WINDOWHEIGHT 900
+#define WINDOWHEIGHT 900 // Hard-coded window size
 
 #define GRID_SIZE 20
 #define GRID_DIMENSION 1000
@@ -34,19 +34,11 @@ enum {
   Snake_RIGHT,
 };
 
-// snake body parts
-//
-
-struct snake {
-  int x;
-  int y;
-  int dir;
-  struct snake *next;
-};
 typedef struct snake Snake;
 
 Snake *head;
 Snake *tail;
+Apple *apple = NULL;
 
 // Create snake on the grid
 //
@@ -147,6 +139,59 @@ void snake_move() {
   }
 }
 
+bool check_self_collision() {
+  Snake *current = head->next;
+  while (current != NULL) {
+    if (head->x == current->x && head->y == current->y) {
+      return true;
+    }
+    current = current->next;
+  }
+  return false;
+}
+
+bool check_wall_collision() {
+  return (head->x < 0 || head->x >= GRID_SIZE || head->y < 0 || head->y >= GRID_SIZE);
+}
+
+bool check_apple_collision() {
+  return (head->x == apple->x && head->y == apple->y);
+}
+
+void grow_snake() {
+  Snake *new_segment = malloc(sizeof(Snake));
+  new_segment->x = tail->x;
+  new_segment->y = tail->y;
+  new_segment->dir = tail->dir;
+  new_segment->next = NULL;
+  tail->next = new_segment;
+  tail = new_segment;
+}
+
+void create_apple() {
+  if (!apple) apple = malloc(sizeof(Apple));
+  apple->x = rand() % GRID_SIZE;
+  apple->y = rand() % GRID_SIZE;
+}
+
+void check_collisions() {
+  if (check_self_collision()) {
+    printf("Colisión con el cuerpo, fin del juego.\n");
+    exit(1);
+  }
+
+  if (check_wall_collision()) {
+    printf("Colisión con la pared, fin del juego.\n");
+    exit(1);
+  }
+
+  if (check_apple_collision()) {
+    grow_snake();
+    create_apple();
+  }
+}
+
+
 int main() {
 
   SDL_Window *window;
@@ -202,6 +247,7 @@ int main() {
     if (current_time - last_move > Snake_Speed) {
       snake_move();
       last_move = current_time;
+      check_collisions();
     }
 
     // logic for controls
