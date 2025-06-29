@@ -110,9 +110,27 @@ void grow_snake() {
 
 void create_apple() {
   if (!apple)
-    apple = malloc(sizeof(Apple));
-  apple->x = rand() % GRID_SIZE;
-  apple->y = rand() % GRID_SIZE;
+  apple = malloc(sizeof(Apple));
+
+
+  bool apple_on_snake;
+  do {
+    apple->x = rand() % GRID_SIZE;
+    apple->y = rand() % GRID_SIZE;
+
+    apple_on_snake = false;
+
+    Snake *current = head;
+    while (current != NULL){
+      if (apple ->x == current ->x && apple->y == current->y){
+        apple_on_snake = true;
+        break;
+      }
+      current = current->next;
+    }
+
+  } while (apple_on_snake == true);
+
 }
 
 
