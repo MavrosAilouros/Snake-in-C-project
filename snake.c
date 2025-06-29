@@ -77,65 +77,6 @@ void render_grid(SDL_Renderer *renderer, int x, int y) {
   return;
 }
 
-// Function to handle snake movement
-//
-
-void snake_move() {
-
-  // Snake Head logic
-  //
-  Snake *new_head = (Snake *)malloc(sizeof(Snake));
-  if (!new_head) {
-    fprintf(stderr, "ERROR:!new_head");
-    exit(1);
-  }
-
-  new_head->x = head->x;
-  new_head->y = head->y;
-  new_head->dir = head->dir;
-
-  switch (new_head->dir) {
-  case Snake_UP:
-    new_head->y--;
-    break;
-  case Snake_DOWN:
-    new_head->y++;
-    break;
-  case Snake_LEFT:
-    new_head->x--;
-    break;
-  case Snake_RIGHT:
-    new_head->x++;
-    break;
-  default:
-    break;
-  }
-
-  new_head->next = head;
-  head = new_head;
-
-  // tail logic
-  //
-
-  if (head != tail) {
-
-    Snake *current = head;
-    while (current->next != tail) {
-      current = current->next;
-    }
-
-    free(tail);
-
-    tail = current;
-    tail->next = NULL;
-  }
-
-  else {
-    free(new_head->next);
-    tail = new_head;
-    tail->next = NULL;
-  }
-}
 
 bool check_self_collision() {
   Snake *current = head->next;
@@ -174,21 +115,6 @@ void create_apple() {
   apple->y = rand() % GRID_SIZE;
 }
 
-void check_collisions() {
-  if (check_self_collision()) {
-    printf("Colisión con el cuerpo, fin del juego.\n");
-    exit(1);
-  }
-
-  if (check_wall_collision()) {
-    printf("Colisión con la pared, fin del juego.\n");
-    exit(1);
-  }
-
-  if (check_apple_collision()) {
-    create_apple();
-  }
-}
 
 int main() {
 
@@ -247,9 +173,71 @@ int main() {
 
     Uint32 current_time = SDL_GetTicks();
     if (current_time - last_move > Snake_Speed) {
-      snake_move();
+      Snake *new_head = (Snake *)malloc(sizeof(Snake));
+      if (!new_head) {
+        fprintf(stderr, "ERROR:!new_head");
+        exit(1);
+      }
+
+      new_head->x = head->x;
+      new_head->y = head->y;
+      new_head->dir = head->dir;
+
+      switch (new_head->dir) {
+        case Snake_UP:
+          new_head->y--;
+          break;
+        case Snake_DOWN:
+          new_head->y++;
+          break;
+        case Snake_LEFT:
+          new_head->x--;
+          break;
+        case Snake_RIGHT:
+          new_head->x++;
+          break;
+        default:
+          break;
+      }
+
+      new_head->next = head;
+      head = new_head;
+
+        if (check_apple_collision()){
+          grow_snake();
+          create_apple();
+        }
+        else {
+          // tail logic
+          //
+
+          if (head != tail) {
+
+            Snake *current = head;
+            while (current->next != tail) {
+              current = current->next;
+            }
+
+            free(tail);
+
+            tail = current;
+            tail->next = NULL;
+          }
+
+          else {
+            free(new_head->next);
+            tail = new_head;
+            tail->next = NULL;
+            }
+
+          }
+
+          if (check_wall_collision() || check_self_collision()){
+            printf("Snek crashed, game over :(");
+            exit(1);
+            }
+
       last_move = current_time;
-      check_collisions();
     }
 
     // logic for controls
