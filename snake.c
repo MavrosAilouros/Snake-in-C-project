@@ -23,7 +23,7 @@
 #define WINDOWHEIGHT 900 // Hard-coded window size
 
 #define GRID_SIZE 20
-#define GRID_DIMENSION 1000
+#define GRID_DIMENSION 800
 
 // Snake direction logic
 //
@@ -109,20 +109,25 @@ void grow_snake() {
 }
 
 void create_apple() {
-  if (!apple)
-  apple = malloc(sizeof(Apple));
+
+  if (!apple) {
+    apple = malloc(sizeof(Apple));
+  }
 
 
   bool apple_on_snake;
+
   do {
     apple->x = rand() % GRID_SIZE;
     apple->y = rand() % GRID_SIZE;
+
 
     apple_on_snake = false;
 
     Snake *current = head;
     while (current != NULL){
       if (apple ->x == current ->x && apple->y == current->y){
+
         apple_on_snake = true;
         break;
       }
