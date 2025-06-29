@@ -175,20 +175,24 @@ void create_apple() {
 }
 
 void check_collisions() {
+  printf("self collision: check_self_collision\n");
   if (check_self_collision()) {
     printf("Colisión con el cuerpo, fin del juego.\n");
     exit(1);
   }
 
+  printf("self collision: check_wall_collision\n");
   if (check_wall_collision()) {
     printf("Colisión con la pared, fin del juego.\n");
     exit(1);
   }
 
+  printf("self collision: check_apple_collision\n");
   if (check_apple_collision()) {
     grow_snake();
     create_apple();
   }
+  printf("self collision block is fine\n");
 }
 
 
