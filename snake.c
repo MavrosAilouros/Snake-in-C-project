@@ -57,8 +57,6 @@ void create_snake() {
   return;
 }
 
-void grow_snake();
-
 void render_grid(SDL_Renderer *renderer, int x, int y) {
 
   SDL_SetRenderDrawColor(renderer, 0x55, 0x55, 0x55, 255);
@@ -151,7 +149,8 @@ bool check_self_collision() {
 }
 
 bool check_wall_collision() {
-  return (head->x < 0 || head->x >= GRID_SIZE || head->y < 0 || head->y >= GRID_SIZE);
+  return (head->x < 0 || head->x >= GRID_SIZE || head->y < 0 ||
+          head->y >= GRID_SIZE);
 }
 
 bool check_apple_collision() {
@@ -169,32 +168,27 @@ void grow_snake() {
 }
 
 void create_apple() {
-  if (!apple) apple = malloc(sizeof(Apple));
+  if (!apple)
+    apple = malloc(sizeof(Apple));
   apple->x = rand() % GRID_SIZE;
   apple->y = rand() % GRID_SIZE;
 }
 
 void check_collisions() {
-  printf("self collision: check_self_collision\n");
   if (check_self_collision()) {
     printf("Colisión con el cuerpo, fin del juego.\n");
     exit(1);
   }
 
-  printf("self collision: check_wall_collision\n");
   if (check_wall_collision()) {
     printf("Colisión con la pared, fin del juego.\n");
     exit(1);
   }
 
-  printf("self collision: check_apple_collision\n");
   if (check_apple_collision()) {
-    grow_snake();
     create_apple();
   }
-  printf("self collision block is fine\n");
 }
-
 
 int main() {
 
@@ -231,6 +225,10 @@ int main() {
   //
 
   create_snake();
+
+  // Add our apple
+
+  create_apple();
 
   // Implement a tick counter --
   // to make our movement appear --
@@ -311,6 +309,16 @@ int main() {
       SDL_RenderFillRect(renderer, &snek_cell);
       current_segment = current_segment->next;
     }
+
+    // Render for apple
+    //
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 255);
+    SDL_Rect apple_cell;
+    apple_cell.w = cell_size;
+    apple_cell.h = cell_size;
+    apple_cell.x = grid_x + (apple->x * cell_size);
+    apple_cell.y = grid_y + (apple->y * cell_size);
+    SDL_RenderFillRect(renderer, &apple_cell);
 
     // RENDERLOOPEND
     SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 255);
