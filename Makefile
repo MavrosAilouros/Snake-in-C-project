@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra
 INCLUDES = -I/usr/include/SDL2/
 LIBS = -lSDL2 -lSDL2_ttf
-SRCS = snake.c score.c
+SRCS = snake.c score.c menu.c
 OBJS = $(SRCS:.c=.o)
 TARGET = snek
 
