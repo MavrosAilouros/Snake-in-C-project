@@ -1,6 +1,5 @@
 #ifndef SNAKE_H
 #define SNAKE_H
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,12 +28,10 @@ extern Snake *tail;
 extern Apple *apple;
 
 // Funciones para colisiones y juego
-void init_snake(int start_x, int start_y, int dir);
+
 void create_apple();
 bool check_self_collision();
 bool check_wall_collision();
 bool check_apple_collision();
-void grow_snake();
-void check_collisions();
 
 #endif
