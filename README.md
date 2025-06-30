@@ -26,26 +26,26 @@ su
 El archivo `.ttf` no se debe descargar, ya que viene incluido en el archivo del repositorio.
 
 ## Compilación y ejecución
-1. Clonar este repositorio en tu computadora
+### 1. Clonar este repositorio en tu computadora
 Se clona este repo, utilizando
 
 ```sh 
 git clone https://github.com/MavrosAilouros/Snake-in-C-project 
 ``` 
 
-2. Se entra al directorio generado tras clonar el git
+### 2. Se entra al directorio generado tras clonar el git
 ```sh
 cd Snake-in-C-project/ 
 ``` 
 
-3. Compilar el proyecto
+### 3. Compilar el proyecto
 Este proyecto contiene un Makefile, el cual le ahorra colocar código para compilarlo, además de darle más facilidad al usuario de poder correrlo. Para esto solamente se debe de escribir la palabra make, de la siguiente manera:
 
 ```sh
 make 
 ``` 
 
-4. Jugar :D
+### 4. Jugar :D
 Luego de ejecutar el `make`, ya se va a obtener el ejecutable, el cual tiene el nombre de **snek** por lo cual para ejecutarlo se coloca:
 
 ```sh
