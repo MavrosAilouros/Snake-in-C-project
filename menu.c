@@ -27,21 +27,13 @@ void inicializar_botones(boton botones[]) {
     strcpy(botones[1].label, "Ver puntaje");
     botones[1].isHovered = false;
 
-    // Nivel dificultad
-    botones[2].rect = (SDL_Rect){ (screenWidth - BUTTON_WIDTH)/2, startY + 2*(BUTTON_HEIGHT + 20), BUTTON_WIDTH, BUTTON_HEIGHT };
-    botones[2].color = (SDL_Color){41,171,135,255};
-    botones[2].hovercolor = (SDL_Color){63,224,176,255};
-    botones[2].textcolor = (SDL_Color){255,255,255,255};
-    strcpy(botones[2].label, "Nivel dificultad");
-    botones[2].isHovered = false;
-
     // Salir
-    botones[3].rect = (SDL_Rect){ (screenWidth - BUTTON_WIDTH)/2, startY + 3*(BUTTON_HEIGHT + 20), BUTTON_WIDTH, BUTTON_HEIGHT };
-    botones[3].color = (SDL_Color){220,20,60,255};
-    botones[3].hovercolor = (SDL_Color){250,50,90,255};
-    botones[3].textcolor = (SDL_Color){255,255,255,255};
-    strcpy(botones[3].label, "Salir");
-    botones[3].isHovered = false;
+    botones[2].rect = (SDL_Rect){ (screenWidth - BUTTON_WIDTH)/2, startY + 2*(BUTTON_HEIGHT + 20), BUTTON_WIDTH, BUTTON_HEIGHT };
+    botones[2].color = (SDL_Color){220,20,60,255};
+    botones[2].hovercolor = (SDL_Color){250,50,90,255};
+    botones[2].textcolor = (SDL_Color){255,255,255,255};
+    strcpy(botones[2].label, "Salir");
+    botones[2].isHovered = false;
 }
 
 void inicializar_botones_dificultad(boton botones[]) {
@@ -114,6 +106,7 @@ int menu(SDL_Window* window, SDL_Renderer* renderer) {
 
     bool running = true;
     SDL_Event event;
+    int seleccion = -1; 
 
     while(running){
         while(SDL_PollEvent(&event)){
@@ -130,20 +123,8 @@ int menu(SDL_Window* window, SDL_Renderer* renderer) {
                     if (event.button.button == SDL_BUTTON_LEFT) {
                         for (int i = 0; i < numero_bot; i++) {
                             if (checkear(&botones[i], event.button.x, event.button.y)) {
-                                switch(i){
-                                    case 0: // Jugar
-                                        running = false;
-                                        break;
-                                    case 1: // Ver puntaje
-                                        // Lógica de puntaje aquí
-                                        break;
-                                    case 2: // Elegir dificultad
-                                        menu_dificultad(window, renderer); // Llama al submenú
-                                        break;
-                                    case 3: // Salir
-                                        running = false;
-                                        break;
-                                }
+                                seleccion = i;   
+                                running = false; 
                             }
                         }
                     }
@@ -156,7 +137,7 @@ int menu(SDL_Window* window, SDL_Renderer* renderer) {
 
         //Inicio del titulo
         SDL_Color tituloColor = {255, 255, 255, 255}; // Blanco
-        SDL_Surface* tituloSurface = TTF_RenderText_Blended(font, "Snake Game", tituloColor);
+        SDL_Surface* tituloSurface = TTF_RenderText_Blended(font, "Snek", tituloColor);
         SDL_Texture* tituloTexture = SDL_CreateTextureFromSurface(renderer, tituloSurface);
         if (tituloTexture) {
             int tituloX = (screenWidth - tituloSurface->w) / 2;
@@ -175,7 +156,7 @@ int menu(SDL_Window* window, SDL_Renderer* renderer) {
 
     TTF_CloseFont(font);
 
-    return 0;
+    return seleccion; 
 }
 
 int menu_dificultad(SDL_Window* window, SDL_Renderer* renderer) {
@@ -190,6 +171,7 @@ int menu_dificultad(SDL_Window* window, SDL_Renderer* renderer) {
 
     bool running = true;
     SDL_Event event;
+    int seleccion = -1; 
 
     while(running){
         while(SDL_PollEvent(&event)){
@@ -206,8 +188,8 @@ int menu_dificultad(SDL_Window* window, SDL_Renderer* renderer) {
                     if (event.button.button == SDL_BUTTON_LEFT) {
                         for (int i = 0; i < 3; i++) {
                             if (checkear(&botones[i], event.button.x, event.button.y)) {
-                               
-                                running = false;
+                                seleccion = i;   
+                                running = false; 
                             }
                         }
                     }
@@ -238,5 +220,5 @@ int menu_dificultad(SDL_Window* window, SDL_Renderer* renderer) {
 
     TTF_CloseFont(font);
 
-    return 0;
+    return seleccion; // <-- Retorna 0, 1 o 2 según la dificultad elegida
 }
