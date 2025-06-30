@@ -1,4 +1,5 @@
 #include "snake.h"
+#include "score.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
@@ -37,6 +38,7 @@ typedef struct snake Snake;
 Snake *head;
 Snake *tail;
 Apple *apple = NULL;
+int score = 0;
 
 // Create snake on the grid
 //
@@ -165,6 +167,10 @@ int main() {
   int grid_x = (screenWidth / 2) - (GRID_DIMENSION / 2);
   int grid_y = (screenHeight / 2) - (GRID_DIMENSION / 2);
 
+  // Load font
+
+  score_init();
+
   // our snek size hehe
   //
 
@@ -187,7 +193,7 @@ int main() {
   //
 
   Uint32 last_move = SDL_GetTicks();
-  int Snake_Speed = 150; // time counter is in MS
+  Uint32 Snake_Speed = 150; // time counter is in MS
 
   bool quit = false;
   SDL_Event event;
@@ -231,6 +237,7 @@ int main() {
 
         if (check_apple_collision()){
           create_apple();
+          score+= 1;
         }
         else {
           // tail logic
@@ -307,6 +314,7 @@ int main() {
     // RENDERLOOPSTR
 
     render_grid(renderer, grid_x, grid_y);
+    score_draw(score, renderer);
 
     // Initial render for snek
     //
@@ -344,6 +352,7 @@ int main() {
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+  score_cleanup();
   SDL_Quit();
 
   return 0;

@@ -1,16 +1,16 @@
 CC = gcc
-CFALGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra
 INCLUDES = -I/usr/include/SDL2/
-LIBS = -lSDL2
-SRCS = snake.c
+LIBS = -lSDL2 -lSDL2_ttf
+SRCS = snake.c score.c
 OBJS = $(SRCS:.c=.o)
 TARGET = snek
 
 $(TARGET) : $(OBJS)
-	$(CC) $(CFALGS) -o $(TARGET) $(OBJS) $(LIBS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
 
 .c .o:
-			$(CC) $(CFALGS) $(INCLUDES) -c $< -o $@
+			$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	$(RM) *.o *~ $(TARGET)
