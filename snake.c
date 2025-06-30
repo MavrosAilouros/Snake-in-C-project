@@ -14,14 +14,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <time.h>
 
 // Fullscreen
 //
 #define WINDOW_X 0
 #define WINDOW_Y 0
-#define WINDOWWIDTH 1600
-#define WINDOWHEIGHT 900 // Hard-coded window size
-
 #define GRID_SIZE 20
 #define GRID_DIMENSION 800
 
@@ -133,42 +131,45 @@ void create_apple() {
       }
       current = current->next;
     }
-
-  } while (apple_on_snake == true);
-
+ }
+ while(apple_on_snake == true);
 }
-
 
 int main() {
 
+  int screenWidth = 0;
+  int screenHeight = 0;
+  srand(time(NULL));
   SDL_Window *window;
   SDL_Renderer *renderer;
 
-  if (SDL_INIT_VIDEO < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "SDL_INIT_VIDEO ERROR");
   }
 
   window =
-      SDL_CreateWindow("Snek", WINDOW_X, WINDOW_Y, WINDOWWIDTH, WINDOWHEIGHT,
-                       SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN);
+      SDL_CreateWindow("Snek", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
   if (!window) {
     fprintf(stderr, "ERROR:!window");
   }
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
 
   if (!renderer) {
     fprintf(stderr, "ERROR:!renderer");
   }
 
-  int grid_x = (WINDOWWIDTH / 2) - (GRID_DIMENSION / 2);
-  int grid_y = (WINDOWHEIGHT / 2) - (GRID_DIMENSION / 2);
+  int grid_x = (screenWidth / 2) - (GRID_DIMENSION / 2);
+  int grid_y = (screenHeight / 2) - (GRID_DIMENSION / 2);
 
   // our snek size hehe
   //
 
   int cell_size = GRID_DIMENSION / GRID_SIZE;
+
+  SDL_ShowWindow(window);
 
   // Add in our little buddy :)
   //
@@ -193,7 +194,8 @@ int main() {
 
     // In-game timing logic
     //
-
+    #define WINDOWWIDTH 1600
+    #define WINDOWHEIGHT 900 // Hard-coded window size
     Uint32 current_time = SDL_GetTicks();
     if (current_time - last_move > Snake_Speed) {
       Snake *new_head = (Snake *)malloc(sizeof(Snake));
@@ -323,6 +325,8 @@ int main() {
 
     // Render for apple
     //
+
+    if(apple != NULL){
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 255);
     SDL_Rect apple_cell;
     apple_cell.w = cell_size;
@@ -330,6 +334,7 @@ int main() {
     apple_cell.x = grid_x + (apple->x * cell_size);
     apple_cell.y = grid_y + (apple->y * cell_size);
     SDL_RenderFillRect(renderer, &apple_cell);
+    }
 
     // RENDERLOOPEND
     SDL_SetRenderDrawColor(renderer, 0x11, 0x11, 0x11, 255);
