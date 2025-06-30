@@ -34,7 +34,7 @@ void mostrar_highscore_en_sdl(SDL_Window *window) {
 		SDL_MESSAGEBOX_INFORMATION,
 		window,
 		"Record",
-		mensjae,
+		mensaje,
 		SDL_arraysize(botones),
 		botones,
 		NULL
