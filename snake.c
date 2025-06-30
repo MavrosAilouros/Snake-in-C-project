@@ -201,8 +201,6 @@ int main() {
 
     // In-game timing logic
     //
-    #define WINDOWWIDTH 1600
-    #define WINDOWHEIGHT 900 // Hard-coded window size
     Uint32 current_time = SDL_GetTicks();
     if (current_time - last_move > Snake_Speed) {
       Snake *new_head = (Snake *)malloc(sizeof(Snake));
