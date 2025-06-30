@@ -46,7 +46,7 @@ make
 ``` 
 
 4. Jugar :D
-Luego de ejecutar el make, ya se va a obtener el ejecutable, el cual tiene el nombre de **snek** por lo cual para ejecutarlo se coloca:
+Luego de ejecutar el `make`, ya se va a obtener el ejecutable, el cual tiene el nombre de **snek** por lo cual para ejecutarlo se coloca:
 
 ```sh
 ./snek 
@@ -68,3 +68,13 @@ Seguido a esto, ya se va a entrar en el juego, de manera que se observa de la si
 Cuando pierda, va a aparecer una pantalla diciendo que perdiste y que se presione OK y va a volver al menú principal
 
 ![Game Over](screenshots/Game_over.png)
+
+También, si se le da a la tecla ESC, aparecerá en el menú.
+
+## Controles
+Para los controles es muy sencillo, en el menú se trabaja con el mouse y los clicks, mientras que en el juego ya para manejar la serpiente se utilizan las flechas del teclado
+
+- Flecha para arriba = Serpiente se mueve hacia arriba
+- Flecha para abajo = Serpiente se mueve hacia abajo
+- Flecha para la derecha = Serpiente se mueve hacia la derecha
+- Flecha para la izquierda = Serpiente se mueve hacia la izquierda
