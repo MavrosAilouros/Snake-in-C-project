@@ -20,7 +20,7 @@ void inicializar_botones(boton botones[]) {
     botones[0].isHovered = false;
 
     // Ver puntaje
-    botones[1].rect = (SDL_Rect){ (screenWidth - BUTTON_WIDTH)/2, startY + BUTTON_HEIGHT + 20, BUTTON_WIDTH, BUTTON_HEIGHT };
+    botones[1].rect = (SDL_Rect){ (screenWidth - BUTTON_WIDTH)/2, startY + BUTTON_HEIGHT + 40, BUTTON_WIDTH, BUTTON_HEIGHT };
     botones[1].color = (SDL_Color){41,171,135,255};
     botones[1].hovercolor = (SDL_Color){63,224,176,255};
     botones[1].textcolor = (SDL_Color){255,255,255,255};
@@ -28,7 +28,7 @@ void inicializar_botones(boton botones[]) {
     botones[1].isHovered = false;
 
     // Salir
-    botones[2].rect = (SDL_Rect){ (screenWidth - BUTTON_WIDTH)/2, startY + 2*(BUTTON_HEIGHT + 20), BUTTON_WIDTH, BUTTON_HEIGHT };
+    botones[2].rect = (SDL_Rect){ (screenWidth - BUTTON_WIDTH)/2, startY + 2*(BUTTON_HEIGHT + 40), BUTTON_WIDTH, BUTTON_HEIGHT };
     botones[2].color = (SDL_Color){220,20,60,255};
     botones[2].hovercolor = (SDL_Color){250,50,90,255};
     botones[2].textcolor = (SDL_Color){255,255,255,255};
@@ -95,9 +95,20 @@ bool checkear(boton* boton, int mouseX, int mouseY) {
 }
 
 int menu(SDL_Window* window, SDL_Renderer* renderer) {
-    TTF_Font* font = TTF_OpenFont("3270NerdFont-Regular.ttf",24);
+    SDL_SetWindowTitle(window, "Snek");
+
+    //Tamaño para los botones
+    TTF_Font* font = TTF_OpenFont("3270NerdFont-Regular.ttf", 40); 
     if (!font){
         printf("No se pudo cargar la fuente: %s, asegurese de tenerla instalada.\n", TTF_GetError());
+        return -1;
+    }
+
+    //Tamaño para el título
+    TTF_Font* font_titulo = TTF_OpenFont("3270NerdFont-Regular.ttf", 200); 
+    if (!font_titulo){
+        printf("No se pudo cargar la fuente para el título: %s\n", TTF_GetError());
+        TTF_CloseFont(font);
         return -1;
     }
 
@@ -135,9 +146,9 @@ int menu(SDL_Window* window, SDL_Renderer* renderer) {
         SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
         SDL_RenderClear(renderer);
 
-        //Inicio del titulo
+        //Renderizar titulo
         SDL_Color tituloColor = {255, 255, 255, 255}; // Blanco
-        SDL_Surface* tituloSurface = TTF_RenderText_Blended(font, "Snek", tituloColor);
+        SDL_Surface* tituloSurface = TTF_RenderText_Blended(font_titulo, "Snek", tituloColor);
         SDL_Texture* tituloTexture = SDL_CreateTextureFromSurface(renderer, tituloSurface);
         if (tituloTexture) {
             int tituloX = (screenWidth - tituloSurface->w) / 2;
@@ -147,22 +158,33 @@ int menu(SDL_Window* window, SDL_Renderer* renderer) {
             SDL_DestroyTexture(tituloTexture);
         }
         SDL_FreeSurface(tituloSurface);
-        //Fin del título
 
+        
         render_botones(renderer, botones, numero_bot, font);
 
         SDL_RenderPresent(renderer);
     }
 
+    TTF_CloseFont(font_titulo);
     TTF_CloseFont(font);
 
     return seleccion; 
 }
 
 int menu_dificultad(SDL_Window* window, SDL_Renderer* renderer) {
-    TTF_Font* font = TTF_OpenFont("3270NerdFont-Regular.ttf",24);
+    SDL_SetWindowTitle(window, "Snek");
+    //Tamaño para los botones
+    TTF_Font* font = TTF_OpenFont("3270NerdFont-Regular.ttf", 40); 
     if (!font){
-        printf("No se pudo cargar la fuente: %s\n", TTF_GetError());
+        printf("No se pudo cargar la fuente: %s, asegurese de tenerla instalada.\n", TTF_GetError());
+        return -1;
+    }
+
+    //Tamaño para el título
+    TTF_Font* font_titulo = TTF_OpenFont("3270NerdFont-Regular.ttf", 100); 
+    if (!font_titulo){
+        printf("No se pudo cargar la fuente para el título: %s\n", TTF_GetError());
+        TTF_CloseFont(font);
         return -1;
     }
 
@@ -202,7 +224,7 @@ int menu_dificultad(SDL_Window* window, SDL_Renderer* renderer) {
 
         //Titulo en el menu de dificultad
         SDL_Color tituloColor = {255, 255, 255, 255}; // Blanco
-        SDL_Surface* tituloSurface = TTF_RenderText_Blended(font, "Elije la dificultad", tituloColor);
+        SDL_Surface* tituloSurface = TTF_RenderText_Blended(font_titulo, "Elije la dificultad", tituloColor);
         SDL_Texture* tituloTexture = SDL_CreateTextureFromSurface(renderer, tituloSurface);
         if (tituloTexture) {
             int tituloX = (screenWidth - tituloSurface->w) / 2;
@@ -220,5 +242,5 @@ int menu_dificultad(SDL_Window* window, SDL_Renderer* renderer) {
 
     TTF_CloseFont(font);
 
-    return seleccion; // <-- Retorna 0, 1 o 2 según la dificultad elegida
+    return seleccion; //Retorna 0, 1 o 2 según la dificultad elegida
 }
