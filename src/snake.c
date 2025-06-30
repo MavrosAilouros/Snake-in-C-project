@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <wchar.h>
 #include <time.h>
+#include "highscore.h"
 
 // Fullscreen
 //
@@ -274,7 +275,7 @@ int main() {
           create_apple();
           last_move=SDL_GetTicks();
         } else if (menu_result == 1){
-          //implementar logica de puntaje
+         mostrar_highscore_en_sdl(window);
         } else if (menu_result == 2){
           quit=true;
           currentState = state_exit;
@@ -327,6 +328,10 @@ int main() {
         }
 
         if (check_wall_collision() || check_self_collision()) {
+          int record = obtener_highscore();
+                if (score > record) {
+                        guardar_highscore(score);
+                }
           printf("Snek collided, game over :(\n");
           SDL_ShowSimpleMessageBox(
             SDL_MESSAGEBOX_INFORMATION,
@@ -410,6 +415,10 @@ int main() {
         }
 
         if (check_wall_collision() || check_self_collision()) {
+          int record = obtener_highscore();
+                if (score > record) {
+                        guardar_highscore(score);
+                }
           printf("Snek collided, game over :(\n");
           SDL_ShowSimpleMessageBox(
             SDL_MESSAGEBOX_INFORMATION,
@@ -492,6 +501,10 @@ int main() {
         }
 
         if (check_wall_collision() || check_self_collision()) {
+          int record = obtener_highscore();
+                if (score > record) {
+                        guardar_highscore(score);
+                }
           printf("Snek collided, game over :(\n");
           SDL_ShowSimpleMessageBox(
             SDL_MESSAGEBOX_INFORMATION,
