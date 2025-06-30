@@ -97,6 +97,7 @@ bool check_apple_collision() {
 }
 
 void grow_snake() {
+
   Snake *new_segment = malloc(sizeof(Snake));
   new_segment->x = tail->x;
   new_segment->y = tail->y;
@@ -229,7 +230,6 @@ int main() {
       head = new_head;
 
         if (check_apple_collision()){
-          grow_snake();
           create_apple();
         }
         else {
@@ -258,7 +258,7 @@ int main() {
           }
 
           if (check_wall_collision() || check_self_collision()){
-            printf("Snek crashed, game over :(");
+            printf("Snek collided, game over :(\n");
             exit(1);
             }
 
